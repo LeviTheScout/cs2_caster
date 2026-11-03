@@ -1,0 +1,479 @@
+# How auto captions write names and game terms, and the spelling to use instead.
+# Read by cs2c/captions.py. Lowercase aliases match any case; an alias with capitals
+# must match exactly. "write" empty: the entity's own name. Player and team aliases
+# only apply on VODs where that team plays. Add misses from data/interim/captions/suggest.tsv.
+kind	entity	alias	write
+# --- Words the system word list lacks, so names spelt like them need a capital ---
+english		bro
+english		yeah
+english		gonna
+# --- Players, by team ---
+# Aurora
+player	MAJ3R	majer
+player	MAJ3R	mader
+player	MAJ3R	madera
+player	MAJ3R	maj
+player	Wicadia	wicardia
+player	Wicadia	micardia
+player	Wicadia	ricardia
+player	Wicadia	wicardi
+player	Wicadia	micardi
+player	Wicadia	wardia
+player	XANTARES	zentares
+player	soulfly	soulflight
+player	woxic	boxic
+player	woxic	moxic
+player	woxic	woxik
+player	woxic	woxick
+player	woxic	oxic
+player	woxic	oxick
+player	woxic	roxic
+player	woxic	roxick
+# B8
+player	alex666	alex
+player	esenthial	essential
+player	esenthial	esential
+player	esenthial	asential
+player	esenthial	sential
+player	esenthial	sentil
+player	esenthial	asentil
+player	esenthial	sentiel
+player	kensizor	kensor
+player	kensizor	kenzor
+player	kensizor	kenizor
+player	kensizor	kensizaur
+player	kensizor	kensar
+player	kensizor	kenzie zor
+player	s1zzi	sizzy
+player	s1zzi	sizz
+player	s1zzi	sizzi
+# BetBoom
+player	Boombl4	boomage
+player	FL4MUS	flamas
+player	FL4MUS	flamis
+player	FL4MUS	flamos
+player	FL4MUS	flamius
+player	FL4MUS	flammers
+player	FL4MUS	flammens
+player	FL4MUS	flamers
+player	Magnojez	magnes
+player	Magnojez	magnozz
+player	Magnojez	magnatez
+player	Magnojez	magnaz
+player	Magnojez	magna jazz
+player	Magnojez	magna jest
+player	d1Ledez	diladez
+player	d1Ledez	dilədaz
+player	d1Ledez	diludaz
+player	d1Ledez	dillerdazz
+player	d1Ledez	dilladz
+player	d1Ledez	dilladez
+player	zorte	zorty
+player	zorte	zorti
+player	zorte	sorte
+player	zorte	zortex
+# FURIA
+player	KSCERATO	serato
+player	KSCERATO	k serato
+player	KSCERATO	kerato
+player	KSCERATO	queserato
+player	KSCERATO	queserado
+player	KSCERATO	kerado
+player	KSCERATO	keratu
+player	YEKINDAR	yakinda
+player	YEKINDAR	yakinder
+player	YEKINDAR	yukinda
+player	YEKINDAR	yinda
+player	YEKINDAR	yinder
+player	YEKINDAR	akinda
+player	YEKINDAR	kinder
+player	molodoy	modoy
+player	molodoy	moloy
+player	molodoy	molotoy
+player	yuurih	yuri
+# Falcons
+player	NiKo	nico
+player	NiKo	nikko
+player	TeSeS	tess
+player	TeSeS	tesses
+player	TeSeS	tessa
+player	TeSeS	tessas
+player	TeSeS	tessus
+player	TeSeS	tessis
+player	TeSeS	tess as
+player	TeSeS	tess says
+player	karrigan	carrian
+player	karrigan	carrigan
+player	karrigan	carigan
+player	karrigan	kerrigan
+player	karrigan	karigan
+player	karrigan	garrigan
+player	karrigan	carrick
+player	kyousuke	kyosuk
+player	kyousuke	kyosuke
+player	kyousuke	keusuke
+player	kyousuke	kisuke
+player	kyousuke	kosuk
+player	kyousuke	kiosuk
+player	kyousuke	yusuke
+player	kyousuke	kasuke
+player	kyousuke	ksuke
+player	kyousuke	kiyosuke
+player	kyousuke	kyu suke
+player	kyousuke	yesuke
+player	kyousuke	kasuk
+player	kyousuke	kiasuk
+player	m0NESY	monosy
+player	m0NESY	monsey
+player	m0NESY	moncasey
+player	m0NESY	monessi
+player	m0NESY	monessy
+player	m0NESY	monesty
+player	m0NESY	mony
+player	m0NESY	mosy
+# FlyQuest
+player	INS	hins
+player	INS	insex
+player	Vexite	bexite
+# G2
+player	HeavyGod	heavy guard
+player	HeavyGod	heavy got
+player	MATYS	mattis
+player	MATYS	matis
+player	MATYS	matsis
+player	NertZ	nerz
+player	NertZ	ner
+player	NertZ	nerds
+player	SunPayus	sumpus
+player	SunPayus	sumpas
+player	SunPayus	sunpas
+player	SunPayus	sunas
+player	SunPayus	senas
+player	SunPayus	sun payas
+player	SunPayus	sen payas
+# GamerLegion
+player	Snax	snacks
+player	Tauson	talson
+player	Tauson	tayson
+player	Tauson	taison
+player	hypex	hyphex
+player	hypex	hipex
+player	hypex	hyperx
+player	hypex	hypix
+player	hypex	highpex
+# Legacy
+player	dumau	du mal
+player	dumau	du ma
+player	dumau	dumaou
+player	dumau	duman
+player	latto	lato
+player	latto	latso
+player	latto	latzo
+player	latto	lotto
+player	n1ssim	nissam
+player	n1ssim	nisim
+player	n1ssim	nism
+player	saadzin	sadzen
+player	saadzin	sads in
+player	saadzin	sads
+# Liquid
+player	NAF	naff
+player	NAF	naf fly
+player	EliGE	alige
+player	EliGE	elise
+player	malbsMd	malbs
+player	malbsMd	malbsy
+player	malbsMd	malbs md
+player	siuhy	shuhay
+player	siuhy	shu hay
+player	ultimate	ultima
+# Lynn Vision
+player	C4LLM3SU3	call me sue
+player	C4LLM3SU3	commie sue
+player	C4LLM3SU3	corvus sue
+player	C4LLM3SU3	kormi sue
+player	C4LLM3SU3	corme sue
+player	C4LLM3SU3	kmi sue
+player	C4LLM3SU3	kormi
+player	C4LLM3SU3	sue
+player	EmiliaQAQ	emilia
+player	EmiliaQAQ	amelia
+player	Starry	star
+player	westmelon	west melon
+player	westmelon	westmelan
+player	westmelon	westmel
+player	westmelon	westman
+player	westmelon	melon
+player	z4KR	zaka
+player	z4KR	zacha
+player	z4KR	zack
+player	z4KR	zakk
+player	z4KR	zakkery
+player	z4KR	zakkary
+# MIBR
+player	LNZ	lanz
+player	LNZ	lenze
+player	insani	insane
+player	kl1m	klem
+player	venomzera	venomz
+player	venomzera	venomz era
+player	venomzera	venom zera
+player	venomzera	venom zero
+player	venomzera	venom
+# MOUZ
+player	Spinx	sphinx
+player	Spinx	spinks
+player	Spinx	spink
+player	Spinx	spin
+player	jL	jal
+player	torzsi	tori
+player	torzsi	tory
+player	torzsi	torsy
+player	torzsi	torszi
+player	torzsi	torshi
+player	torzsi	toriy
+player	torzsi	torsie
+player	torzsi	toshi
+player	torzsi	torji
+player	torzsi	toasty
+player	xelex	zellex
+player	xelex	zelex
+player	xelex	zelx
+player	xelex	zel
+player	xertioN	exertion
+player	xertioN	zersion
+player	xertioN	zertion
+player	xertioN	zerxion
+player	xertioN	zertian
+player	xertioN	zersian
+player	xertioN	sertion
+player	xertioN	exercion
+player	Brollan	brolin
+player	Brollan	brolan
+player	Brollan	broland
+# NRG
+player	oSee	ocean
+player	oSee	oc
+# Ninjas in Pyjamas
+player	Snappi	snappy
+player	Snappi	zappi
+player	cairne	kairon
+player	sjuush	shush
+player	stavn	staun
+player	stavn	stawn
+player	stavn	stand
+player	xKacpersky	kaspersky
+player	xKacpersky	kacpersky
+# Spirit
+player	donk	dong
+player	donk	don
+player	magixx	magix
+player	magixx	magic
+player	sh1ro	shirou
+player	sh1ro	shirro
+player	sh1ro	shiru
+player	sh1ro	shir
+player	tN1R	tanir
+player	tN1R	tenir
+player	tN1R	tanier
+player	tN1R	tener
+player	tN1R	tenz
+player	zont1x	zontics
+player	zont1x	zontic
+player	zont1x	zontik
+player	zont1x	sontix
+# TYLOO
+player	JamYoung	jamy young
+player	JamYoung	jamy
+player	JamYoung	jamong
+player	JamYoung	jamyong
+player	JamYoung	jamun
+player	JamYoung	young
+player	Moseyuh	mosey
+player	Moseyuh	mozeya
+# The MongolZ
+player	910	9 10
+player	910	nine ten
+player	Mzinho	mazinho
+player	Mzinho	mozinho
+player	Mzinho	muzinho
+player	Mzinho	mazinio
+player	Mzinho	mazinno
+player	Mzinho	nzinho
+player	Mzinho	zinho
+player	Mzinho	mazin
+player	Techno4K	techno
+player	Techno4K	tecno
+player	cobrazera	cobra zera
+player	cobrazera	cobra azera
+player	cobrazera	cobra zero
+player	cobrazera	cobra 0
+player	cobrazera	cobra
+player	cobrazera	azera
+# Vitality
+player	ZywOo	zyu
+player	ZywOo	zywood
+player	ZywOo	zywoop
+player	ZywOo	zwood
+player	flameZ	flamesy
+player	flameZ	flamecy
+player	flameZ	flamescy
+player	flameZ	flames
+player	mezii	mezi
+player	mezii	mezzi
+player	ropz	robs
+player	ropz	ropes
+# --- Teams: "write" keeps the caster's own form when it is a real short name ---
+team	MOUZ	mous	MOUZ
+team	MOUZ	maus	MOUZ
+team	MOUZ	mouse	MOUZ
+team	MOUZ	moze	MOUZ
+team	TYLOO	tailoo	TYLOO
+team	TYLOO	tyoo	TYLOO
+team	TYLOO	tylo	TYLOO
+team	GamerLegion	game legion	GamerLegion
+team	GamerLegion	gamers legion	GamerLegion
+team	GamerLegion	legion	Legion
+team	BetBoom	boom	Boom
+team	Vitality	vitalia	Vitality
+team	The MongolZ	mongols	MongolZ
+team	The MongolZ	mongol	MongolZ
+team	The MongolZ	monglz	MongolZ
+team	Lynn Vision	lin vision	Lynn Vision
+team	Lynn Vision	lind vision	Lynn Vision
+team	Lynn Vision	lim vision	Lynn Vision
+team	Lynn Vision	flint vision	Lynn Vision
+team	Lynn Vision	l vision	Lynn Vision
+team	Lynn Vision	linvision	Lynn Vision
+team	Lynn Vision	limvision	Lynn Vision
+team	Lynn Vision	envision	Lynn Vision
+team	Lynn Vision	lvg	LVG
+team	Lynn Vision	vision	Vision
+team	Ninjas in Pyjamas	nip	NiP
+team	Ninjas in Pyjamas	ninjas	Ninjas
+team	Ninjas in Pyjamas	ninjas in pajamas	Ninjas in Pyjamas
+team	B8	bait	B8
+team	Falcons	flc	Falcons
+team	Legacy	lgcy	Legacy
+# --- Maps (entity: the demo's map name) ---
+map	de_inferno	inferno	Inferno
+map	de_mirage	mirage	Mirage
+map	de_nuke	nuke	Nuke
+map	de_dust2	dust 2	Dust2
+map	de_dust2	dust two	Dust2
+map	de_dust2	dust ii	Dust2
+map	de_dust2	dust2	Dust2
+map	de_ancient	ancient	Ancient
+map	de_anubis	anubis	Anubis
+map	de_overpass	overpass	Overpass
+map	de_train	train	Train
+map	de_vertigo	vertigo	Vertigo
+# --- Weapons (entity: the parser's display name, see WEAPONS in demo.py) ---
+weapon	AK-47	ak	AK
+weapon	AK-47	ak47	AK-47
+weapon	AWP	awp	AWP
+weapon	AWP	op	AWP
+weapon	M4A4	m4a4	M4A4
+weapon	M4A4	m4 a4	M4A4
+weapon	M4A4	a4	A4
+weapon	M4A1-S	m4a1	M4A1-S
+weapon	M4A1-S	m4a1s	M4A1-S
+weapon	M4A1-S	m4 a1	M4A1-S
+weapon	M4A1-S	a1	A1
+weapon	M4A1-S	a1s	A1-S
+weapon	M4	m4	M4
+weapon	Desert Eagle	deagle	Deagle
+weapon	Desert Eagle	deag	Deag
+weapon	Desert Eagle	desert eagle	Desert Eagle
+weapon	Galil AR	galil	Galil
+weapon	FAMAS	famas	FAMAS
+weapon	AUG	aug	AUG
+weapon	SG 553	sg	SG
+weapon	SG 553	sg 553	SG 553
+weapon	SG 553	krieg	Krieg
+weapon	SSG 08	scout	Scout
+weapon	SSG 08	ssg	SSG
+weapon	USP-S	usp	USP
+weapon	USP-S	usp s	USP-S
+weapon	P2000	p2000	P2000
+weapon	Glock-18	glock	Glock
+weapon	P250	p250	P250
+weapon	P250	b250	P250
+weapon	Five-SeveN	five seven	Five-SeveN
+weapon	Five-SeveN	fiveseven	Five-SeveN
+weapon	Tec-9	tec 9	Tec-9
+weapon	Tec-9	tech 9	Tec-9
+weapon	Tec-9	tec9	Tec-9
+weapon	Tec-9	tech9	Tec-9
+weapon	Tec-9	tec nine	Tec-9
+weapon	Tec-9	tech nine	Tec-9
+weapon	CZ75-Auto	cz	CZ
+weapon	CZ75-Auto	cz75	CZ75
+weapon	CZ75-Auto	cz 75	CZ75
+weapon	Dual Berettas	dualies	Dualies
+weapon	Dual Berettas	dual berettas	Dual Berettas
+weapon	Dual Berettas	berettas	Berettas
+weapon	R8 Revolver	r8	R8
+weapon	R8 Revolver	revolver	revolver
+weapon	MP9	mp9	MP9
+weapon	MAC-10	mac 10	MAC-10
+weapon	MAC-10	mac10	MAC-10
+weapon	MAC-10	mac ten	MAC-10
+weapon	MAC-10	mac	Mac
+weapon	MP7	mp7	MP7
+weapon	MP5-SD	mp5	MP5
+weapon	MP5-SD	mp5 sd	MP5-SD
+weapon	UMP-45	ump	UMP
+weapon	UMP-45	ump45	UMP-45
+weapon	P90	p90	P90
+weapon	PP-Bizon	bizon	Bizon
+weapon	Nova	nova	Nova
+weapon	XM1014	xm	XM
+weapon	XM1014	xm1014	XM1014
+weapon	MAG-7	mag7	MAG-7
+weapon	MAG-7	mag 7	MAG-7
+weapon	Sawed-Off	sawed off	Sawed-Off
+weapon	Sawed-Off	sawedoff	Sawed-Off
+weapon	Sawed-Off	sawn off	Sawed-Off
+weapon	Negev	negev	Negev
+weapon	M249	m249	M249
+weapon	Zeus x27	zeus	Zeus
+weapon	Zeus x27	taser	taser
+weapon	Knife	knife	knife
+weapon	C4 Explosive	c4	C4
+weapon	Kevlar	kevlar	Kevlar
+# --- Utility (entity: utility type in utility.parquet; fire = molotov or incendiary) ---
+utility	smoke	smoke	smoke
+utility	smoke	smoke grenade	smoke grenade
+utility	flash	flash	flash
+utility	flash	flashbang	flashbang
+utility	flash	flash bang	flashbang
+utility	flash	popflash	pop flash
+utility	flash	pop flash	pop flash
+utility	fire	molly	molly
+utility	fire	mollies	mollies
+utility	fire	moly	molly
+utility	fire	molotov	molotov
+utility	fire	incendiary	incendiary
+utility	fire	incendiaries	incendiaries
+utility	fire	incen	incen
+utility	he	HE	HE
+utility	he	he grenade	HE grenade
+utility	he	h grenade	HE grenade
+utility	he	he nade	HE nade
+utility	he	heavy nade	HE nade
+utility	he	heavy nades	HE nades
+utility	decoy	decoy	decoy
+utility	any	nade	nade
+utility	any	grenade	grenade
+utility	any	util	util
+utility	any	utility	utility
+# --- Sides ---
+side	CT	ct	CT
+side	CT	ct side	CT side
+side	CT	ct sides	CT sides
+side	CT	ctside	CT side
+side	T	t side	T side
+side	T	t sides	T sides
+side	T	tside	T side
+side	T	ts	Ts

@@ -44,3 +44,11 @@ def team_names() -> dict[str, str]:
     """Team name as written in demos -> one canonical name."""
     with open(META / "team_names.tsv", newline="") as f:
         return {r["demo_name"]: r["team"] for r in csv.DictReader(f, delimiter="\t")}
+
+
+def players() -> dict[str, str]:
+    """Steam id -> the player's name as we write it (in-game names vary between demos)."""
+    if not (META / "players.tsv").exists():
+        return {}
+    with open(META / "players.tsv", newline="") as f:
+        return {r["steamid"]: r["name"] for r in csv.DictReader(f, delimiter="\t")}
