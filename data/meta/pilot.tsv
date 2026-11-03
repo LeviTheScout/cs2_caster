@@ -1,0 +1,6 @@
+map_id	event	hltv_match_id	stage	map	demo_files	vod_id	caption_file	caster_crew
+cgn-2394772-inferno	iem_cologne_major_2026	2394772	Stage 1 (Bo1)	de_inferno	raw/demos/iem_cologne_major_2026/2394772-gamerlegion-vs-nrg-iem-cologne-major-2026-stage-1/gamerlegion-vs-nrg-inferno.dem	2OZOsByVSfY	raw/captions/2OZOsByVSfY.en-orig.json3	ESL
+cgn-2394983-dust2	iem_cologne_major_2026	2394983	Stage 3 (Bo3, map 2)	de_dust2	raw/demos/iem_cologne_major_2026/2394983-vitality-vs-mouz-iem-cologne-major/vitality-vs-mouz-m2-dust2-p1.dem;raw/demos/iem_cologne_major_2026/2394983-vitality-vs-mouz-iem-cologne-major/vitality-vs-mouz-m2-dust2-p2.dem	2ObF6lvJuOI	raw/captions/2ObF6lvJuOI.en-orig.json3	ESL
+cgn-2395002-mirage	iem_cologne_major_2026	2395002	Grand final (map 1)	de_mirage	raw/demos/iem_cologne_major_2026/2395002-furia-vs-falcons-iem-cologne-major/furia-vs-falcons-m1-mirage.dem	p6U28DEBn8A	raw/captions/p6U28DEBn8A.en-orig.json3	ESL
+cac-2394200-inferno	cac2026	2394200	Group A (Bo1)	de_inferno	raw/demos/cac2026/2394200-mouz-vs-tyloo/mouz-vs-tyloo-inferno.dem	3ghlPEH8mwA	raw/captions/3ghlPEH8mwA.en-orig.json3	PGL
+cac-2394228-nuke	cac2026	2394228	Grand final (Bo5, map 1)	de_nuke	raw/demos/cac2026/2394228-falcons-vs-legacy/falcons-vs-legacy-m1-nuke.dem	pnQSrk07Pyc	raw/captions/pnQSrk07Pyc.en-orig.json3	PGL

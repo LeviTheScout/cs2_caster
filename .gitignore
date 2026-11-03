@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Large or regenerable data (demos, captions, parsed tables, built datasets)
+data/raw/
+data/interim/
+data/processed/
+
+# Model files
+*.gguf
+*.safetensors
+checkpoints/
+outputs/
+
+# Editor and OS
+.vscode/
+.idea/
+.DS_Store
