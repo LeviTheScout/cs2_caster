@@ -27,6 +27,30 @@ Generate live commentary for pro CS2 matches using a fine-tuned LLM:
 
 **Preference that shapes the design:** no hand-written if/else rules that score how important or exciting a play is. Code may calculate plain facts, but the model decides what matters and how excited to sound.
 
+**Product (decided 2026-11-03): a written live ticker, like Cricbuzz's ball-by-ball text or OneFootball's live ticker. It is not spoken-style casting.**
+- **Driven by the timeline:**
+  - Entries follow the match's event timeline (`timeline.parquet`).
+  - Every kill is reported. Kills in a rush are reported together in one entry.
+- **Entry types:**
+  - kills, and groups of kills
+  - bomb plant, defuse and explosion
+  - round-end summary with the score
+  - buy-phase preview: economy and stakes
+  - occasional state updates, e.g. a clutch setup with HP and time left
+- **Style is learned from the casters, never written by hand.** The training targets are the casters' own words for each moment, so the model learns from real casting:
+  - phrasing ("swings in for one", "quick on the trade")
+  - what matters
+  - how much to stress it
+- **No hand-written style examples or style rules.**
+- **Cleanup only, no rewriting of style:**
+  - fix misheard names using the rosters
+  - remove caption marks (`>>`) and fillers
+  - cut the parts of an utterance that are off-topic or rely on facts the input lacks
+- **Emphasis on the page:** exclamation marks and capitals come from the intensity of the casters' reaction, which is learned, not added by rules.
+- **Two layers, as in Cricbuzz:**
+  - Every event gets a plain factual report.
+  - Moments the casters reacted to carry the casters' words and emphasis.
+
 ---
 
 ## 2. Summary of where things stand
@@ -115,6 +139,18 @@ The feed has two streams: `scoreboard` (full current state) and `log` (individua
 ### Derivable by your code
 
 Man count, round kills (2K, 3K, ace), first kill, trades, win and loss streaks, a player's kills over recent rounds, money changes and what each team bought.
+
+**To do in the facts step: economy facts per team.** Casters talk about buys in about 10–13% of freeze-time utterances and 8–12% of live-round ones (keyword count, 2026-11-03). Examples: "a little broken", "now they're at the full buy". Code gives plain facts and never labels a buy "eco", "force" or "broken"; the model learns that wording from the casters.
+
+- **Team money and spend:** money before the buy, and the amount spent.
+- **Team equipment value after the buy.** The rich tier uses the exact value. The HLTV tier uses an estimate from each player's main weapon and armour, since HLTV doesn't send equipment value, pistols or utility.
+- **Weapon summary:** rifles, AWPs, SMGs, shotguns and pistols.
+- **Armour, helmets and kits.**
+- **Next-round affordability:** how many players can afford a rifle with armour next round, worked out from the game's fixed prices.
+- **Loss streak, and the team's buys in the previous rounds.**
+- **Pistol round:** round 1 or 13.
+- **When to build frames:** during freeze time, when money is known, and at the live tick, when the buys are visible.
+- **Sources:** the data is already in `player_rounds` (`money_start`, `spent`, `equip_value`, `inventory`, `armor`, `helmet`, `defuser`, `money_end`). Live, HLTV's scoreboard gives money, main weapon, armour, helmet and kit, and the round history gives the loss streak.
 
 ### Reported quirks to handle
 
@@ -322,7 +358,51 @@ Neither source has one table of match details, so build a small "match card" per
 - **Casters often speak at or just before the kill.** The search window should start a little before the event, not at it as Gemini proposed.
 - **Strict one-to-one mapping won't work.** Using the misheard-name table, a player was named within 6 seconds for only 58 of 123 kills, and both killer and victim for only 16. Some unnamed kills still get commentary ("He nails the head shots"), so true coverage is higher. Casters also merge kills ("Three kills from that...").
 
-**Decision: pair a short group of events with the commentary span that covers it, and leave kills with no clear commentary out of training.**
+**Decision: pair a short group of events with the commentary span that covers it.**
+
+**Decision (2026-11-03): every kill gets commentary.** No kill is skipped live, and the model never learns `<silent>` for a kill. Importance is learned from how the model comments (calm or excited, wording, and the version 2 intensity labels), not from whether it does.
+- **Live:** kills in a burst, such as a trade 0.3 s later, share one line, so every kill is covered without falling behind.
+- **Target lines when casters don't name a kill** (a player was named for only 58 of 123 kills in the test):
+  1. Group the kill with nearby kills the casters did talk about.
+  2. Use the casters' line wherever they talked about the kill.
+  3. **Decided 2026-11-03:** kills no caster line covers get a **plain factual report**, like Cricbuzz's line for every ball even when TV commentators say nothing.
+     - Example: "Zero kills Spinx with the AK-47. 4v4."
+     - It covers only the facts: who, weapon, headshot, flash assist, man count, and position when the tier has it.
+     - It carries no flavour or emphasis. Those come only from the casters.
+     - This teaches importance: kills the casters ignored train toward plain reports, and kills they reacted to train toward their words and emphasis.
+     - **Wording is not hard-coded or repetitive** (user, 2026-11-03).
+       - Collect real low-key caster lines from the captions, e.g. "and Jee goes down".
+       - A larger model writes each plain line from the facts, using that caster wording as its vocabulary.
+       - Keep it only if the fact checker passes it.
+       - Track what share of the training data these lines make up.
+
+**Entries and triggers (decided 2026-11-03):**
+- **Kill groups always get an entry.**
+- **Grouping:**
+  - Kills are grouped by a time gap, starting at 3 s and tuned on the pilot.
+  - A caster's summary of kills from several groups (e.g. "three kills from Grim") goes with the last group it covers.
+  - That group's input includes the earlier kills, as recent events and previous entries.
+- **Moments where the model may post or stay `<silent>`:**
+  - a clutch setup (the man count reaches 1vX)
+  - a timeout
+  - a weapon pickup
+  - a grenade landing (rich tier only)
+  - Whether to post is learned from whether the casters talked about it.
+- **Always an entry:**
+  - bomb plant, defuse and explosion
+  - round end
+  - buy phase
+- **Context in every input**, from fixed to fast-changing (about 600–1,000 tokens):
+  1. **Match card:** event, stage, format, map number, series score, teams, rosters.
+  2. **Map so far:** score, round, half and sides, match point, recent round results, streaks, economy.
+  3. **Player form on this map:** K/D, ADR and multi-kills, at least for the players involved.
+  4. **The whole current round so far:** every event since the round went live, plus the current state (alive, HP, weapons, bomb status, time into round).
+  5. **Recent entries:** this round's entries, plus the last one or two from the previous round.
+  6. **What to report now.**
+  - **Order:** layers 1–3 stay fixed through a round and come first, and layers 4–6 grow at the end. This keeps prompt caching effective on CPU.
+  - **Training vs live:** training uses the previous targets as the recent entries. Live, each entry must pass the fact checker before it becomes context.
+  - **Tiers:** each tier fills the layers only with the fields it has.
+- **Context:** every kill also stays in the input for later lines.
 
 **Proposed method, in two levels (2026-11-03):**
 
@@ -357,6 +437,24 @@ Neither source has one table of match details, so build a small "match card" per
 - Set aside lines about things the input can't support, such as positions, smoke and player history. Otherwise the model learns to invent them. This is the main source of made-up details. A real example: "Frozen in the smoke but spammed out by Alexi... up in the top mid."
 - Watch for replays between rounds, when casters discuss a kill from a minute ago.
 - Skip speaker separation at first. It's weak with overlapping speech, and published error rates of 11.7–17% come from easier audio. Use game phase as a stand-in for style: live rounds for play-by-play and freeze time for analysis.
+
+### Talk away from events
+
+**Tested 2026-11-03 on 3 pilot maps:** during live rounds, 56–62% of caster utterances are not within about 6 s of a kill, plant, defuse or round end. There are also 90–117 utterances per map in freeze time.
+
+Quiet talk falls into 4 kinds:
+- **Grounded in facts we have:** "5-1, NRG have had a couple of chances, but GamerLegion dictating the tone". Keep it.
+- **Reads of play needing data we lack:** setups, rotations, utility, positions. Example: "they're scaling this execute and MOUZ not buying it". Drop it, or keep it for the rich tier.
+- **Story beyond the match card:** drop it, unless the card has the fact.
+- **Banter and production:** "check in on the B stream". Drop it.
+
+**Proposed handling:**
+- Add "quiet tick" frames every ~10–15 s with no events.
+- For each quiet tick, the target is a grounded line if casters said one, otherwise `<silent>`.
+- This lets the model learn from data when there's nothing worth saying.
+- Keep the `<silent>` share moderate, and tune it, so the model doesn't learn to stay quiet everywhere.
+- Text readers don't need every second filled.
+- **Unknown:** what share of quiet talk is grounded. The Phase 2 tagging measures it.
 
 ### Training on full data while staying honest on less
 
@@ -441,6 +539,11 @@ Importance becomes an input fact, and excitement is what the model learns to out
 
 ### Base model
 
+**Update 2026-11-03: no 24/7 serving is planned.** The user will run the model on a GPU server only when testing or analysing, so CPU speed no longer limits model choice.
+- Qwen3-4B-Instruct-2507, Qwen3-8B and Gemma 4 E4B compete on quality alone. Fine-tune them and compare on held-out series.
+- The CPU speed test is optional.
+- The notes below about speed on CPU apply only if the model is ever run on this PC.
+
 Updated 2026-11-02 after the model survey in [reports/Open models for CS2 commentary.md](reports/Open%20models%20for%20CS2%20commentary.md). The CPU speeds there are **Estimates** from memory bandwidth, not measurements on this PC.
 
 - **Primary: Qwen3-4B-Instruct-2507** (Apache 2.0).
@@ -523,6 +626,11 @@ The Gemini chat focused on what to say and didn't cover these:
 - **Replay tool:** record feed messages to disk and replay them at real speed, so development doesn't depend on a live match.
 
 ### Where the model runs
+
+**Decided 2026-11-03: on demand, not 24/7.**
+- **Offline testing:** replay recorded matches in Colab or Kaggle notebooks.
+- **Live test runs:** a pay-per-second GPU such as Modal, started only when needed.
+- **This PC:** optional. The CPU analysis below matters only if local serving is ever wanted.
 
 Training and serving are separate jobs. QLoRA training needs a GPU for a few hours, and free notebook GPUs (Colab, Kaggle) can do it. Serving has to stay up for a 2–3 hour series and answer within a few seconds.
 
