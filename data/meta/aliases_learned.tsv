@@ -1,0 +1,8 @@
+# Written by python -m cs2c.learn_aliases: misheard names proven by demo timing. Do not edit;
+# move a wrong one into aliases.tsv with kind english, or a right one there to keep it by hand.
+kind	entity	alias	write	said	hits	chance	similarity
+player	SunPayus	sias		7	6	0.63	50
+player	Tauson	towson		13	11	1.03	67
+player	TeSeS	tases		8	6	1.1	80
+player	XANTARES	zentarz		15	10	1.63	53
+player	XANTARES	zentar		9	6	0.9	57

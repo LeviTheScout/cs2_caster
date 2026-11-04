@@ -7,6 +7,7 @@ kind	entity	alias	write
 english		bro
 english		yeah
 english		gonna
+english		navi
 # --- Players, by team ---
 # Aurora
 player	MAJ3R	majer
@@ -20,6 +21,7 @@ player	Wicadia	wicardi
 player	Wicadia	micardi
 player	Wicadia	wardia
 player	XANTARES	zentares
+player	XANTARES	zentarez
 player	soulfly	soulflight
 player	woxic	boxic
 player	woxic	moxic
@@ -29,6 +31,7 @@ player	woxic	oxic
 player	woxic	oxick
 player	woxic	roxic
 player	woxic	roxick
+player	woxic	wick
 # B8
 player	alex666	alex
 player	esenthial	essential
@@ -56,6 +59,7 @@ player	FL4MUS	flamius
 player	FL4MUS	flammers
 player	FL4MUS	flammens
 player	FL4MUS	flamers
+player	FL4MUS	flamie
 player	Magnojez	magnes
 player	Magnojez	magnozz
 player	Magnojez	magnatez
@@ -90,6 +94,7 @@ player	YEKINDAR	kinder
 player	molodoy	modoy
 player	molodoy	moloy
 player	molodoy	molotoy
+player	molodoy	monoy
 player	yuurih	yuri
 # Falcons
 player	NiKo	nico
@@ -109,6 +114,7 @@ player	karrigan	kerrigan
 player	karrigan	karigan
 player	karrigan	garrigan
 player	karrigan	carrick
+player	karrigan	caragan
 player	kyousuke	kyosuk
 player	kyousuke	kyosuke
 player	kyousuke	keusuke
@@ -123,6 +129,7 @@ player	kyousuke	kyu suke
 player	kyousuke	yesuke
 player	kyousuke	kasuk
 player	kyousuke	kiasuk
+player	kyousuke	kuk
 player	m0NESY	monosy
 player	m0NESY	monsey
 player	m0NESY	moncasey
@@ -236,10 +243,12 @@ player	torzsi	torsie
 player	torzsi	toshi
 player	torzsi	torji
 player	torzsi	toasty
+player	torzsi	dorsy
 player	xelex	zellex
 player	xelex	zelex
 player	xelex	zelx
 player	xelex	zel
+player	xelex	zelix
 player	xertioN	exertion
 player	xertioN	zersion
 player	xertioN	zertion
@@ -291,6 +300,7 @@ player	JamYoung	jamun
 player	JamYoung	young
 player	Moseyuh	mosey
 player	Moseyuh	mozeya
+player	Moseyuh	mozer
 # The MongolZ
 player	910	9 10
 player	910	nine ten

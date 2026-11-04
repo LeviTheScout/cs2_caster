@@ -1,6 +1,6 @@
 # CS2 Live AI Commentary: Project Plan and Findings
 
-Last updated: 2 November 2026
+Last updated: 4 November 2026
 
 This file records the project goal, the decisions made so far, what was tested and found, what is still unknown, and what to do next. The starting point was a Gemini conversation saved as `blank.pdf`. Many of its claims were checked and some turned out to be wrong (see section 11).
 
@@ -62,7 +62,7 @@ Generate live commentary for pro CS2 matches using a fine-tuned LLM:
 | Do demos contain what the live feed sends? | Yes, and more | Tested against the reported feed format |
 | Can demos be converted to the feed's format? | Structure yes; some values can't be identical, which shouldn't affect training | Tested on 4 files; no real feed capture yet |
 | Do VODs exist for the demos? | 105 of 106 Cologne series have a single-match VOD | Matched by title |
-| Do kills line up with commentary? | Yes, with a clear time offset | Tested on 5 demo/VOD pairs |
+| Do kills line up with commentary? | Yes. Offset plus a small drift on ESL VODs; every pilot map synced and checked | Tested on all 20 pilot maps (Step 2) |
 | Captions or Whisper for mapping? | Captions | Tested on one map |
 | Is strict one-to-one event mapping possible? | No; use short event groups | Tested on one map |
 | Can intensity be measured automatically? | **Not yet.** Simple signals are too weak | Tested |
@@ -327,7 +327,7 @@ Neither source has one table of match details, so build a small "match card" per
 - It's one map and one Whisper model.
 - The misheard-name table was built mostly from caption errors, which favours captions in that row. The automatic row doesn't have that bias.
 - On the older PGL video, Whisper's text was clearly better: it had punctuation, `karrigan` and "9-1" where captions had "carrian" and "91".
-- This ESL video's captions had punctuation and `>>` speaker-change marks, while the PGL video's had almost no punctuation. Other Cologne VODs have not been checked for this.
+- This ESL video's captions had punctuation and `>>` speaker-change marks, while the older PGL video's (Copenhagen 2024) had almost no punctuation. **Update 2026-11-04:** all 18 pilot VODs, ESL and PGL 2026, have punctuation (sentences average 6–12 words). `>>` marks are sparse, especially on PGL.
 
 **Known caption problems**
 
@@ -404,7 +404,58 @@ Neither source has one table of match details, so build a small "match card" per
   - **Tiers:** each tier fills the layers only with the fields it has.
 - **Context:** every kill also stays in the input for later lines.
 
-**Proposed method, in two levels (2026-11-03):**
+### Caption pipeline, step by step (decided 2026-11-04)
+
+Each step is a script that reruns on new maps without hand work, except where marked.
+
+| Step | What | Status |
+|---|---|---|
+| 0 | Parse demos (`cs2c.parse_demo`) | Done, 20 maps |
+| 1 | Clean captions: names and game terms from `aliases.tsv` plus each name's own spellings, scoped to the teams on the VOD (`cs2c.clean_captions`) | v1 done: 18 VODs, 8,606 words fixed |
+| 2 | Sync demo clock to VOD, cut each map's words out, label round and phase (`cs2c.sync`) | **Done, all 20 maps pass** |
+| 3 | Learn missing aliases from the demos: unknown words that keep landing next to one player's events (`cs2c.learn_aliases`) | Done: 5 learned automatically, 9 more added to `aliases.tsv` after review, 2 rejected ("alex", "magna") |
+| 4 | Split words into utterances (`cs2c.utterances`) | Done: 18,153 utterances, median 5–10 words |
+| 5 | Group events into reportable entries, with facts | Planned |
+| 6 | Match utterances to entries | Planned |
+| 7 | Hand-label a gold set (about 100 entries), measure and tune | Planned, **hand work** |
+| 8 | Turn matched caster words into training targets | Planned |
+| 9 | Build input frames per tier | Planned |
+| 10 | Assemble the dataset, split by series | Planned |
+
+**Step 2 findings (Tested 2026-11-04, 20 maps):**
+- **Evidence:** caption words tagged with a player's steam id, against that player's kills and deaths. A mention counts most at 2–6 s after the kill, and the offset says when casters react, not the exact frame shown.
+- **One clear peak per map**, 1.4–3× the next best offset.
+- **The offset drifts on ESL VODs**, steadily, by 2–5.5 s per 1,000 s of demo, which is up to 17 s over the grand-final Inferno. It does not jump at pauses or half-time. PGL VODs are nearly flat.
+  - **Model:** offset = start + drift × time, or a constant when drift doesn't help on held-out rounds (6 of 20 maps, all with little drift).
+  - The demo clock is exactly tick ÷ 64, so the drift comes from the server's tick timing or the broadcast, not the parser.
+- **No jumps** anywhere, including the Dust2 map split over two demo files. Steps are still allowed when they add at least 4 kills of evidence, so a cut VOD would show up.
+- **Fitting each round separately, as the prototype did, was wrong:** its offsets jumped ±100 s from noise.
+- **Checks on every map:**
+  - Held-out rounds score 3.8–8× chance.
+  - Count tags ("1v3") match real alive counts 44–100% of the time, against 3–14% at wrong offsets.
+  - "plant" and "defuse" words land at bomb events 3–20× more often than at wrong offsets.
+  - Neither check is used in the fit.
+  - A read of sample kills against the captions confirmed it, including both ends of the most-drifted map.
+- **Output:** 155,414 words inside maps, out of 346,451 in the VODs. The rest is pre-show, breaks and desk talk.
+
+**Step 3 findings (Tested 2026-11-04):**
+- **Method:** a word the corrector left untagged is tested against each player on its maps. It is counted when it lands 3 s before to 11 s after that player's kill, death, plant or defuse, and compared with the same words moved to wrong times.
+  - **Accepted** if the timing is strong, one player clearly wins, and the spelling is loosely like the name. Closer spelling needs less timing proof.
+  - **Otherwise review**, if the timing alone is strong.
+- **Answer key:** the 296 hand-written player aliases were hidden, and 134 of them come up often enough to test.
+  - 43 were found with the right player: 23 accepted and 20 sent to review.
+  - **None was accepted for a wrong player.** The 4 wrong-player cases all went to review: teammates in the same fights, and "alex", which is alex666 on B8's VOD and xelex on MOUZ's.
+- **Conservative by design:** a form said only a few times can't be proven. The rest stays with the hand table and the review list.
+- **Learned on the real data:** kuk (kyousuke), sias (SunPayus), towson (Tauson), tases (TeSeS), zentarz and zentar (XANTARES). Every sighting was read in context.
+
+**Step 4 findings (Tested 2026-11-04):**
+- **Punctuation is good on both crews.** Sentences average 6–12 words, so a sentence end is the main break.
+- **Speaker marks (`>>`) are sparse**, 17–313 per map, so they are used only as hard breaks.
+- **Casters pause mid-sentence.** A pause of 1.5 s or more ends an utterance only when the next word starts a sentence: a capital, a name tag or a number. A silence of 4 s or more always ends one.
+- **Units are never merged here.** The matcher groups consecutive ones.
+- **Noise units remain** ("[cheering]", and "heat", a YouTube caption artefact during music). They hold no game terms, and Step 8 drops them.
+
+**Proposed method, in two levels (2026-11-03).** Level 1 is now built as Step 2; see its findings above. The per-round refinement and per-pause offsets proposed here proved unnecessary. The offset is a line per map, and bomb words and count tags are used as checks rather than fit inputs. Level 2 is Steps 5–6.
 
 1. **Clock alignment.**
    - Find one offset per map from name hits (tested).
@@ -513,6 +564,13 @@ Proposed 2026-11-03. This replaces the plain "set aside unsupported lines" rule 
 - **Caster excitement** comes from the audio, and is what the text should copy. It usually follows importance, but not always.
 
 Importance becomes an input fact, and excitement is what the model learns to output.
+
+**Win-probability model (parallel track, planned 2026-11-04):**
+- **What:** a small separate model gives each moment's chance of winning the round, and each entry's swing in that chance, as input facts.
+- **Data:** `states.parquet` per second, labelled with the round winner from `rounds.parquet`.
+- **Inputs:** HLTV-tier only, so it runs live: alive per side, HP, armour, main weapons, equipment value, kits, bomb status and site, time since plant, round time.
+- **Size:** 20 maps is only about 450 rounds. It needs a few hundred archive maps, about 10,000 rounds. These only need parsing, no VODs.
+- **Training and checks:** LightGBM or logistic regression, split by match, judged on log loss, Brier score and calibration.
 
 ### Proposed design
 
@@ -699,9 +757,10 @@ Also track how often it repeats itself. Your recorded feed captures are the fina
 
 ### Phase 2: Commentary pipeline on 5 maps
 
-- [ ] Download captions and audio for 5 maps with mixed stages and casters.
-- [ ] Clean captions: tags, censoring, and misheard names using the roster.
-- [ ] Align each map and investigate rounds that sit at unusual offsets.
+- [x] Download captions for 20 maps with mixed stages and casters. Audio not yet downloaded; it's only needed for intensity.
+- [x] Clean captions: misheard names and game terms using the rosters, plus names learned from demo timing (Steps 1 and 3). Tags and censoring are kept as rows for now and removed in Step 8.
+- [x] Align each map (Step 2). No round sits at an unusual offset once drift is modelled.
+- [x] Split captions into utterances (Step 4).
 - [ ] Group events and pair them with commentary spans, and drop kills with no clear commentary.
 - [ ] Filter desk chat.
 - [ ] Tag each line with the data it depends on: keyword and per-map callout lists first, a small model for unclear lines, and about 200 lines checked by hand.

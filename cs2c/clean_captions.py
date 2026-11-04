@@ -9,7 +9,9 @@ data/interim/captions/:
   suggest.tsv       frequent words that matched nothing and are not English,
                     with the closest name on that VOD: add real misses to
                     data/meta/aliases.tsv and run again
-New players found in the demos are added to data/meta/players.tsv.
+New players found in the demos are added to data/meta/players.tsv. Aliases
+come from data/meta/aliases.tsv (by hand) and aliases_learned.tsv (written by
+cs2c.learn_aliases once the maps are synced).
 """
 import collections
 import csv
@@ -23,6 +25,7 @@ from . import captions
 from .paths import INTERIM, META, pilot_maps, players, team_names
 
 OUT = INTERIM / "captions"
+LEARNED = META / "aliases_learned.tsv"
 SUGGEST_MIN_COUNT = 3
 SUGGEST_MIN_SCORE = 60
 
@@ -93,6 +96,8 @@ def main(argv: list[str]) -> int:
     rosters = {v: vod_rosters(by_vod[v]) for v in wanted}
     known = add_new_players(list(rosters.values()))
     teams, aliases, english = team_names(), captions.read_aliases(), captions.english_words()
+    if LEARNED.exists():  # misheard names proven by demo timing, see learn_aliases
+        aliases += captions.read_aliases(LEARNED)
     if english is None:
         print(f"no word list at {captions.DICT_FILE}: every name alias needs a mid-sentence capital")
     OUT.mkdir(parents=True, exist_ok=True)

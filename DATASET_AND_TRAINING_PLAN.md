@@ -14,6 +14,8 @@ The details behind each step are in [PROJECT_PLAN.md](PROJECT_PLAN.md).
 
 ### Steps
 
+**Status 2026-11-04:** steps 1, 3, 4 and 5 are done for 20 pilot maps, so the plan moved from 5 to 20 directly. Step 2 is done except the match cards and the HLTV name table. The caption work is now broken into Steps 0–10 in [PROJECT_PLAN.md](PROJECT_PLAN.md), section 6, "Caption pipeline, step by step". That table is the current one; the list below is the original outline.
+
 1. **Pick the maps**
    - Choose 5 pilot maps with mixed stages and casters, mostly from Cologne.
    - Check whether `cac2026` has English VODs with captions. If not, choose another non-Major event.

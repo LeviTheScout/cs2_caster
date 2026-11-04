@@ -25,6 +25,11 @@ One folder per map, `interim/<map_id>/`:
 | `states.parquet` | player per second of live play: HP, armour, money, weapon, bomb carrier, position (`filled` marks seconds carried over a recording gap) |
 | `pickups.parquet` | weapon or kit picked up during a round |
 | `timeline.parquet` | every event of the map in time order with a short summary; `in_hltv` marks events HLTV's live log sends |
+| `sync.json` | demo-to-VOD clock (`python -m cs2c.sync`): offset model, per-round offsets and evidence, checks |
+| `captions.parquet` | caption word inside the map: cleaned text and tags, round, phase (`freeze`, `live`, `over`), demo time |
+| `utterances.parquet` | utterance (about one remark, `python -m cs2c.utterances`): times on both clocks, round and phase, cleaned and raw text, the tags inside, words per second, share of shouted words |
+
+`interim/captions/` holds the whole-VOD caption tables from `python -m cs2c.clean_captions`: `<vod_id>.parquet` (one row per word), `fixes.tsv` (every change made) and `suggest.tsv` (frequent unmatched words to review).
 
 ## `meta/` (tracked)
 
@@ -32,4 +37,7 @@ One folder per map, `interim/<map_id>/`:
 - **`team_names.tsv`:** team name as each organiser writes it in demos, mapped to one standard name. The parser stops if a name is missing.
 - **`cologne_vods.json`:** Cologne series matched to ESL Archives VODs, matched by script, with one known wrong match.
 - **`cac2026_vods.tsv`:** all 30 CS Asia Championships 2026 series matched to PGL VOD's single-match VODs.
-- **`align_prototype/<map_id>.align.json`:** demo-to-VOD clock offsets from the prototype aligner, with VOD time = demo `game_time` + `off`. The `offs` field holds per-round offsets, keyed by round minus 1. These are temporary until Step 3 replaces them.
+- **`players.tsv`:** steam id to the player's name as we write it (in-game names vary between demos). New players are added by `clean_captions`.
+- **`aliases.tsv`:** hand-checked misheard forms of names and game terms, used by `clean_captions`.
+- **`aliases_learned.tsv`:** misheard player names proven by demo timing, written by `python -m cs2c.learn_aliases`, with the evidence for each. Don't edit it; move a wrong one into `aliases.tsv` with kind `english`. Its review list is `interim/captions/aliases_review.tsv`.
+- **`align_prototype/<map_id>.align.json`:** offsets from the old prototype aligner. **Superseded** by `interim/<map_id>/sync.json`; its per-round offsets were noise.
